@@ -14,13 +14,13 @@ class Address{
 	string street, city, state, country;
 };
 
+
 class Book{
 	string uniqueId;
 	string title;
 	vector<Author> authors;
 	BookType bookType;
 };
-
 
 class BookItem: public Book{
 	string barcode;
@@ -30,6 +30,8 @@ class BookItem: public Book{
 	BookFormat bookFormat;
 	Date issueDate;
 };
+
+
 
 enum BookType{
 	SCI_FI, ROMANTIC, FANTASY, DRAMA
@@ -62,7 +64,7 @@ class Person{
 
 class Author: public Person{
 	vector<Book> booksPublished;
-}
+};
 
 
 
@@ -81,7 +83,6 @@ class Member: public SystemUsers{
 class Librarian: public SystemUsers{
 	Search searchObj;
 	BookIssueService issueServices;
-
 public:
 	void addBookItem(BookItem bookItem);
 	void deleteBookItem(string barcode);

@@ -2,8 +2,6 @@
 using namespace std;
 
 
-
-
 // actors
 //  - customer
 //  - system
@@ -87,7 +85,7 @@ public:
 };
 
 
-enum Genre {
+enum Genre{
 	SCI_FI, DRAMA, ROM_COM, FANTASY
 };
 
