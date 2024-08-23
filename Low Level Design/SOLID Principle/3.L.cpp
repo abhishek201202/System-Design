@@ -1,47 +1,31 @@
-class RecoginitionResult{
-public:
-    virtual ~RecoginitionResult() = default;
-    virtual double getConfidenceScore() = 0;
+#include<bits/stdc++.h>
+using namespace std;
+
+class Bike {
+public:   
+    virtual void turnOnEngine();
+    virtual void accelerate();
 };
 
-
-class MyCloudRecognitionResult: public RecoginitionResult{
+class MotorCycle: public Bike {
+    bool isEngine = false;
+    int speed = 0;
 public:
-    // returns confidence score value [10.0 - 100.0]
-    double getConfidenceScore() override;
+    void turnOnEnginer() {
+        isEngine = true;
+    }
+    void accelerate() {
+        speed += 10;
+    }
 };
 
-
-class GoogleCloudRecognitionResult: public RecoginitionResult{
+class Bicycle: public Bike {
 public:
-    // retunrs confidence score value [0.0 - 10.0]
-    double getConfidenceScore() override;
-};
-
-
-/*********************************************************
-example - 2
-********************************************************/
-
-class RecoginitionResult{
-public:
-    virtual ~RecoginitionResult() = default;
-    virtual double setSampleRate(int hrtz) = 0;
-};
-
-
-class MyCloudRecognitionResult: public RecoginitionResult{
-public:
-    // sets Audio sample rates [8000kHz - 16000kHz]
-    double setSampleRate(int hrtz) override;
-};
-
-
-class GoogleCloudRecognitionResult: public RecoginitionResult{
-public:
-    // sets Audio sample rates [8000kHz - 48000kHz]
-    double setSampleRate(int hrtz) override;
-};
-
-
-
+    // this is voilating Liskov principle
+    void turnOnEngine() {
+        throw new exception("there is no enginer");
+    }
+    void accelerate() {
+        // do something
+    }
+}

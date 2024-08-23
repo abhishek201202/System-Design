@@ -1,54 +1,44 @@
-class AudioDeviceManager{
+#include<bits/stdc++.h>
+using namespace std;
+
+// Not following Interface Segmented Principle
+class RestaurantEmployee {
+    public:
+    virtual void washDishes();
+    virtual void serveCustomers();
+    virtual void cookFood();
+};
+
+class Waiter: public RestaurantEmployee {
 public:
-    virtual ~AudioDeviceManager() = default;
-    virtual bool start(AudioDevice &d) = 0;
-    virtual bool stop(AudioDevice &d) = 0;
-    virtual int readData(char** buffer, int size) = 0;
-    virtual int writeData(char** buffer, int size) = 0;
+    void washDishes() {
+        // not my job
+    }
+    void serveCustomers() {
+        // do something
+    }
+    void cookFood() {
+        // not my job
+    }
 };
 
 
-class MyAudioInputDeviceManager: public AudioDeviceManager{
+// Following Interface Segmented Principle
+class WaiterInterface {
 public:
-    bool start(AudioDevice &d) override;
-    bool stop(AudioDevice &d) override;
-    int readData(char** buffer, int size) override;
-    int writeData(char** buffer, int size) override;
+    virtual void serveCustomers();
+    virtual void takeOrders();
 };
 
-
-
-// refactored code
-
-class AudioDeviceManager{
+class ChefInterface {
 public:
-    virtual ~AudioDeviceManager() = default;
-    virtual bool start(AudioDevice &d) = 0;
-    virtual bool stop(AudioDevice &d) = 0;
+    virtual void cookFood();
+    virtual void decideMenu();
 };
 
-class AudioInputDeviceManager{
+class Waiter: public WaiterInterface {
 public:
-    virtual ~AudioDeviceManager() = default;
-    virtual int readData(char** buffer, int size) = 0;
+    void serveCustomers() {
+        // do something
+    }
 };
-
-class AudioOutputDeviceManager{
-public:
-    virtual ~AudioDeviceManager() = default;
-    virtual int writeData(char** buffer, int size) = 0;
-};
-
-class MyAudioInputDeviceManager: public AudioDeviceManager, public AudioInputDeviceManager{
-public:
-    bool start(AudioDevice &d) override;
-    bool stop(AudioDevice &d) override;
-    int readData(char** buffer, int size) override;
-};
-
-
-
-
-
-
-

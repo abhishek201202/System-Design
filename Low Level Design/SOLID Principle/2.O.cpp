@@ -1,58 +1,42 @@
-class MyCloud{
+#include<bits/stdc++.h>
+using namespace std;
+
+// Not following Open/closed principle
+class InvoiceDao {
+    Invoice invoice;
 public:
-    void sendRequest(string req, string res);
-};
+    InvoiceDao(Invoice invoice) {
+        this->invoice = invoice;
+    }
 
+    void saveToDB() {
+        // save to DB
+    }
 
-class RequestManager{
-private:
-    RequestFormatter& m_requestFormatter;
-    MyCloud& m_cloud;
-
-public:
-    RequestManager(RequestFormatter& requestFormatter, MyCloud& mcl);
-    void sendRequest(string req);
-};
-
-
-
-
-// Re - factored Code
-class CloudInterface{
-public:
-    virtual ~CloudInterf    ace() default;
-    virtual void sendRequest(string req, string& res) = 0;
-};
-
-class MyCloud: public CloudInterface{
-public:
-    MyCloud() = default;
-    void sendRequest(string req, string res) override;
-};
-
-class GoogleCloud: public CloudInterface{
-public:
-    GoogleCloud() = default;
-    void sendRequest(string req, string res) override; 
-};
-
-class RequestManager{
-private:
-    RequestManager& m_requestFormatter;
-    CloudInterface& m_cloud;
-public:
-    RequestManager(RequestManager& requestFormatter, CloudInterface& mcl);
-    void sendRequest(string req);
+    // new requested feature
+    void saveToFile() {
+        // save to File
+    }
 };
 
 
 
+// Following Open/closed principle
+class InvoiceDao {
+public:
+    virtual void save(Invoice invoice);
+};
 
+class DatabaseInvoiceDao: public InvoiceDao {
+public:
+    void save(Invoice invoice) {
+        // save to db
+    }
+};
 
-
-
-
-
-
-
-
+class FileInvoiceDao: public InvoiceDao {
+public:
+    void save(Invoice invoice) {
+        // save to file
+    }
+}

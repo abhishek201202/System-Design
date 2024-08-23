@@ -1,69 +1,25 @@
-class MyCloud{
-public:
-    void upload16BitPCAudio(string filepath){}
+#include<bits/stdc++.h>
+using namespace std;
+
+// Keyboard(wired, bluetooth)
+// Mouse(wired, bluetooth)
+
+// Not following dependency inversion principle
+class MacBook {
+    WiredKeyboard keyboard;
+    WiredMouse mouse;
+    public MacBook() {
+        keyboard = new WiredKeyboard();
+        mouse = new WiredMouse();
+    }
 };
 
-
-class FileUploader{
-public:
-    FileUploader(MyCloud& mcl);
-    void startUpload(string filepath){}
+// Following dependency inversion principle
+class MacBook {
+    Keyboard keyboard;
+    Mouse mouse;
+    MackBook(Keyboard keyboard, Mouse mouse) {
+        this.keyboard = keyboard;
+        this.mouse = mouse;
+    }
 };
-
-
-// refactored code
-
-
-
-class Cloud{
-public:
-    void upload16BitPCAudio(string filepath) = 0;
-};
-
-
-class MyCloud: public Cloud{
-public:
-    void upload16BitPCAudio(string filepath){}
-};
-
-
-class FileUploader{
-public:
-    FileUploader(Cloud& mcl);
-    void startUpload(string filepath){}
-};
-
-
-/// solution to above problem
-
-class Cloud{
-public:
-    void upload(string filepath) = 0;
-};
-
-class MyCloud: public Cloud{
-public:
-    void upload(string filepath){}
-};
-
-class FileUploader{
-public:
-    FileUploader(Cloud& mcl);
-    void startUpload(string filepath){}
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
