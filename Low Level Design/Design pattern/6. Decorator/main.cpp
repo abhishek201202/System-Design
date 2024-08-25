@@ -64,7 +64,7 @@ int main() {
     cout << myCoffee->description() << " $" << myCoffee->cost() << endl; // 2.5
     // Add sugar to the coffee
     myCoffee = new SugarDecorator(myCoffee);
-    cout << myCoffee->description() << " $" << myCoffee->cost() << endl; // 2.2
+    cout << myCoffee->description() << " $" << myCoffee->cost() << endl; // 2.7
     delete myCoffee;  // Important to delete to avoid memory leaks
     return 0;
 }
