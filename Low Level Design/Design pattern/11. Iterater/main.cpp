@@ -8,7 +8,8 @@ public:
     virtual int next() = 0;
 };
 
-// aggregate interface class Aggregate {
+// aggregate interface 
+class Aggregate {
 public:
     virtual Iterator* createIterator() const = 0;
 };
