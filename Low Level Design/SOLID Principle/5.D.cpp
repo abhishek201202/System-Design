@@ -1,3 +1,6 @@
+/*
+class should depend on interfaces rather than concrete classes
+*/
 #include<bits/stdc++.h>
 using namespace std;
 

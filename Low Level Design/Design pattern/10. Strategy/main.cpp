@@ -1,3 +1,6 @@
+/*
+It helps to define multiple algorithms for the task and we can select any algorithm depending on the situation.
+*/
 #include<bits/stdc++.h>
 using namespace std;
 

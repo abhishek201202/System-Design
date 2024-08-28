@@ -1,3 +1,6 @@
+/*
+In this object (observable) maintains a list of its dependent(observers) and notifies them of any change in its state.
+*/
 #include<bits/stdc++.h>
 using namespace std;
 

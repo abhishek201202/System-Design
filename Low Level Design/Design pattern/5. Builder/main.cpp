@@ -1,3 +1,6 @@
+/*
+When you want to create object step by step
+*/
 #include<bits/stdc++.h>
 using namespace std;
 

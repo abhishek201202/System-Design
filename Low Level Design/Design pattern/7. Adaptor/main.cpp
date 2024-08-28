@@ -1,3 +1,6 @@
+/*
+This pattern acts as a bridge or intermediate between 2 incompatible interfaces.
+*/
 #include<bits/stdc++.h>
 using namespace std;
 

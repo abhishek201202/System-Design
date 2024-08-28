@@ -1,3 +1,6 @@
+/*
+This pattern helps to add more functionality to existing objects, without changing its structure.
+*/
 #include<bits/stdc++.h>
 using namespace std;
 

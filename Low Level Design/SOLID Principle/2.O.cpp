@@ -1,3 +1,7 @@
+/*
+Open for extension but closed for modification
+*/
+
 #include<bits/stdc++.h>
 using namespace std;
 

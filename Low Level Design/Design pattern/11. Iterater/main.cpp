@@ -1,3 +1,6 @@
+/*
+It provides a way to access elements of a collection sequentially without exposing the underlying representation of the collection.
+*/
 #include<bits/stdc++.h>
 using namespace std;
 

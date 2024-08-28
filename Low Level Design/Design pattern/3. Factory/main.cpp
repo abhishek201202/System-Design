@@ -1,3 +1,6 @@
+/*
+It is used when all the object creation and business logic we need to keep at one place.
+*/
 #include<bits/stdc++.h>
 using namespace std;
 

@@ -1,3 +1,6 @@
+/*
+It is used when we have to create only 1 instance of the class.
+*/
 #include<bits/stdc++.h>
 #include<mutex>
 #include<thread>

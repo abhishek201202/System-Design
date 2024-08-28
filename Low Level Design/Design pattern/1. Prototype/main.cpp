@@ -1,3 +1,6 @@
+/*
+It is used when we have to make a copy / clone from existing objects.
+*/
 #include<bits/stdc++.h>
 using namespace std;
 

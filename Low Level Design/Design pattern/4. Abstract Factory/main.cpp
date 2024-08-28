@@ -1,3 +1,6 @@
+/*
+It’s a factory of factory.
+*/
 #include<bits/stdc++.h>
 using namespace std;
 

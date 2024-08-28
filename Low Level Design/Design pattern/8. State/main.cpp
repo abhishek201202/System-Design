@@ -1,3 +1,6 @@
+/*
+It allows an object to alter its behavior when its internal state changes.
+*/
 #include<bits/stdc++.h>
 using namespace std;
 
