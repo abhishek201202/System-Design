@@ -5,8 +5,7 @@
 4. user return vehicle
 5. system can add / remove vehicle
 6. multiple stores from where user can rent the vehicle.
-7. Each store has its own inventory of vehicles
-    - Single inventory for all the stores (this requirement could also be possible)
+7. Each Store has its own inventory
 */
 
 #include<bits/stdc++.h>
@@ -16,30 +15,70 @@ enum VehicalType {
     CAR, BIKE
 };
 
-// not following open / closed principle
 class CarRentalSystem {
     vector<Store*> stores;
-    CarRentalSystem();
-
-    void addStore();
-    void removeStore();
-
-    void addVehicle(Store* store, Vehicle* vehicle);
-    void removeVehicle(Store* store, Vehicle* vehicle);
+    vector<User*> users;
+    CarRentalSystemDao *storeDao, *userDao, *vehicleDao;
+    CarRentalSystem() {
+        storeDao = new StoreCarRentalSystemDao();
+        userDao = new UserCarRentalSystemDao();
+        vehicleDao = new VehicleCarRentalSystemDao();
+    }
 };
 
-// not following open / closed principle
+class CarRentalSystemDao {
+};
+
+class StoreCarRentalSystemDao: public CarRentalSystemDao {
+    void addStore();
+    void removeStore();
+}
+class UserCarRentalSystemDao: public CarRentalSystemDao {
+    void addUser();
+    void deleteUser();
+}
+class VehicleCarRentalSystemDao: public CarRentalSystemDao {
+    void addVehicle(Store* store, Vehicle* vehicle);
+    void removeVehicle(Store* store, Vehicle* vehicle);
+}
+
 class Store {
     string id;
+    VehicleInventory *carInventoryObj, *bikeInventoryObj;
+    Store() {
+        carInventoryObj = new CarInventory();
+        bikeInventoryObj = new BikeInventory();
+    }
+}
+
+class VehicleInventory {
     vector<Vehical*> vehicals;
     unordered_map<Vehical*, User*> vehToUserMp;
     unordered_map<User*, Vehical*> userToVehMp;
 
-    Store() {}
     vector<Vehical*> searchVehical(VehicalType type);
+
+    void addVehical(Vehical* vehical);
+    void removeVehical(Vehical* vehical);
+
     void rentVehicle(string vechicalId);
     void returnVehicle(Vehical* vehical);
-}
+};
+
+class CarInventory: public VehicleInventory {
+    void addVehical(Vehical* vehical);
+    void removeVehical(Vehical* vehical);
+    void rentVehicle(string vechicalId);
+    void returnVehicle(Vehical* vehical);
+};
+
+class BikeInventory: public VehicleInventory {
+    void addVehical(Vehical* vehical);
+    void removeVehical(Vehical* vehical);
+    void rentVehicle(string vechicalId);
+    void returnVehicle(Vehical* vehical);
+};
+
 
 class Vehical {
     string id;
@@ -48,13 +87,15 @@ class Vehical {
 
 class Car: public Vehical {
 
-}
+};
 
 class Bike: public Vehical {
 
-}
+};
 
 
 class User {
-
-}
+    string name;
+    string emailId;
+    string phoneNumber;
+};
