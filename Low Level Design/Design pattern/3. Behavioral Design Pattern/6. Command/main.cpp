@@ -3,17 +3,25 @@ Turns requests (commands) into objects, allowing you to either parameterize or q
 This will help to decouple the request sender and request.
 */
 #include<bits/stdc++.h>
-#include <iostream>
+#include<iostream>
+#include<stack>
 using namespace std;
 
 // Receiver class
 class Light {
+private:
+    bool isOn = false;
 public:
     void turnOn() {
+        isOn = true;
         cout << "The light is on." << endl;
     }
     void turnOff() {
+        isOn = false;
         cout << "The light is off." << endl;
+    }
+    bool getState() const {
+        return isOn;
     }
 };
 
@@ -21,6 +29,7 @@ public:
 class Command {
 public:
     virtual void execute() = 0;
+    virtual void undo() = 0;
     virtual ~Command() = default;
 };
 
@@ -33,6 +42,9 @@ public:
     void execute() override {
         light->turnOn();
     }
+    void undo() override {
+        light->turnOff();
+    }
 };
 
 // Concrete Command to turn off the light
@@ -44,21 +56,43 @@ public:
     void execute() override {
         light->turnOff();
     }
+    void undo() override {
+        light->turnOn();
+    }
 };
 
-
-// Invoker class
+// Invoker class with undo/redo functionality
 class RemoteControl {
 private:
-    Command* command;
+    stack<Command*> commandHistory;
+    stack<Command*> redoStack;
 public:
-    void setCommand(Command* command) {
-        this->command = command;
+    void executeCommand(Command* command) {
+        command->execute();
+        commandHistory.push(command);
+        // Clear the redo stack after a new command is executed
+        while (!redoStack.empty()) {
+            redoStack.pop();
+        }
     }
-    void pressButton() {
-        if (command) {
+    void undo() {
+        if (!commandHistory.empty()) {
+            Command* command = commandHistory.top();
+            command->undo();
+            commandHistory.pop();
+            redoStack.push(command);
+        } else {
+            cout << "Nothing to undo." << endl;
+        }
+    }
+    void redo() {
+        if (!redoStack.empty()) {
+            Command* command = redoStack.top();
             command->execute();
-            command = nullptr;
+            redoStack.pop();
+            commandHistory.push(command);
+        } else {
+            cout << "Nothing to redo." << endl;
         }
     }
 };
@@ -71,12 +105,13 @@ int main() {
     RemoteControl remote;
 
     // Turn the light on
-    remote.setCommand(new TurnOnCommand(&livingRoomLight));
-    remote.pressButton();
-
+    remote.executeCommand(new TurnOnCommand(&livingRoomLight));
     // Turn the light off
-    remote.setCommand(new TurnOffCommand(&livingRoomLight));
-    remote.pressButton();
+    remote.executeCommand(new TurnOnCommand(&livingRoomLight));
+    // Undo the last command (which was turning off the light)
+    remote.undo();
+    // Redo the last undone command (which was turning off the light)
+    remote.redo();
 
     return 0;
 }
