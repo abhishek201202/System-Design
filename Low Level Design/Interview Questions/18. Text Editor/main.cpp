@@ -2,6 +2,7 @@
 FR - 
 1. memory issue
 2. add/delete delete character anywhere in the doc
+3. print document
 */
 
 #include<bits/stdc++.h>
