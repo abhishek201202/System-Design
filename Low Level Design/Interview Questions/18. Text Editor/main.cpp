@@ -1,7 +1,7 @@
 /*
 FR - 
 1. memory issue
-2. add delete character anywhere in the doc
+2. add/delete delete character anywhere in the doc
 */
 
 #include<bits/stdc++.h>
