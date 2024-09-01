@@ -6,31 +6,30 @@ object A with B without breaking the behaviour of program
 #include<bits/stdc++.h>
 using namespace std;
 
-class Bike {
-public:   
-    virtual void turnOnEngine();
-    virtual void accelerate();
-};
-
-class MotorCycle: public Bike {
-    bool isEngine = false;
-    int speed = 0;
+class Bird {
 public:
-    void turnOnEngine() {
-        isEngine = true;
-    }
-    void accelerate() {
-        speed += 10;
+    virtual void fly() {
+        std::cout << "Flying in the sky." << std::endl;
     }
 };
 
-class Bicycle: public Bike {
+class Penguin : public Bird {
 public:
-    // this is voilating Liskov principle
-    void turnOnEngine() {
-        throw new exception("there is no engine");
+    void fly() override {
+        throw std::logic_error("Penguins can't fly!");
     }
-    void accelerate() {
-        // do something
-    }
+};
+
+void makeBirdFly(Bird& bird) {
+    bird.fly();
+}
+
+int main() {
+    Bird sparrow;
+    Penguin penguin;
+
+    makeBirdFly(sparrow);  // Works fine
+    makeBirdFly(penguin);  // Throws an error at runtime
+
+    return 0;
 }
