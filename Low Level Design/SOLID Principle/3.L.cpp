@@ -28,7 +28,7 @@ class Bicycle: public Bike {
 public:
     // this is voilating Liskov principle
     void turnOnEngine() {
-        throw new exception("there is no enginer");
+        throw new exception("there is no engine");
     }
     void accelerate() {
         // do something
