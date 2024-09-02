@@ -2,23 +2,22 @@
 This pattern helps to hide the system complexity from the client.
 */
 #include<bits/stdc++.h>
-#include <iostream>
 using namespace std;
 
 // Subsystem 1: DVD Player
 class DVDPlayer {
 public:
     void on() {
-        std::cout << "DVD Player is ON.\n";
+        cout << "DVD Player is ON.\n";
     }
-    void play(std::string movie) {
-        std::cout << "Playing movie: " << movie << "\n";
+    void play(string movie) {
+        cout << "Playing movie: " << movie << endl;
     }
     void stop() {
-        std::cout << "Stopping movie.\n";
+        cout << "Stopping movie.\n";
     }
     void off() {
-        std::cout << "DVD Player is OFF.\n";
+        cout << "DVD Player is OFF.\n";
     }
 };
 
@@ -26,13 +25,13 @@ public:
 class Amplifier {
 public:
     void on() {
-        std::cout << "Amplifier is ON.\n";
+        cout << "Amplifier is ON.\n";
     }
     void setVolume(int level) {
-        std::cout << "Setting volume to " << level << "\n";
+        cout << "Setting volume to " << level << endl;
     }
     void off() {
-        std::cout << "Amplifier is OFF.\n";
+        cout << "Amplifier is OFF.\n";
     }
 };
 
@@ -40,13 +39,13 @@ public:
 class Projector {
 public:
     void on() {
-        std::cout << "Projector is ON.\n";
+        cout << "Projector is ON.\n";
     }
     void wideScreenMode() {
-        std::cout << "Projector in widescreen mode.\n";
+        cout << "Projector in widescreen mode.\n";
     }
     void off() {
-        std::cout << "Projector is OFF.\n";
+        cout << "Projector is OFF.\n";
     }
 };
 
@@ -54,10 +53,10 @@ public:
 class TheaterLights {
 public:
     void dim(int level) {
-        std::cout << "Dimming lights to " << level << "%\n";
+        cout << "Dimming lights to " << level << "%\n";
     }
     void on() {
-        std::cout << "Theater lights are ON.\n";
+        cout << "Theater lights are ON.\n";
     }
 };
 
@@ -69,11 +68,9 @@ private:
     Projector& projector;
     TheaterLights& lights;
 public:
-    HomeTheaterFacade(DVDPlayer& dvd, Amplifier& amp, Projector& proj, TheaterLights& light)
-        : dvdPlayer(dvd), amplifier(amp), projector(proj), lights(light) {}
-
-    void watchMovie(const std::string& movie) {
-        std::cout << "Get ready to watch a movie...\n";
+    HomeTheaterFacade(DVDPlayer& dvd, Amplifier& amp, Projector& proj, TheaterLights& light) : dvdPlayer(dvd), amplifier(amp), projector(proj), lights(light) {}
+    void watchMovie(const string& movie) {
+        cout << "Get ready to watch a movie...\n";
         lights.dim(10);
         projector.on();
         projector.wideScreenMode();
@@ -82,9 +79,8 @@ public:
         dvdPlayer.on();
         dvdPlayer.play(movie);
     }
-
     void endMovie() {
-        std::cout << "Shutting movie theater down...\n";
+        cout << "Shutting movie theater down...\n";
         dvdPlayer.stop();
         dvdPlayer.off();
         amplifier.off();
@@ -103,7 +99,7 @@ int main() {
     HomeTheaterFacade homeTheater(dvdPlayer, amplifier, projector, lights);
 
     homeTheater.watchMovie("Inception");
-    std::cout << "\n";
+    cout << endl;
     homeTheater.endMovie();
 
     return 0;
