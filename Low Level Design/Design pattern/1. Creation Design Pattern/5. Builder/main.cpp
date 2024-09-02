@@ -6,11 +6,11 @@ using namespace std;
 
 class House {
 private:
-    std::string walls;
-    std::string doors;
+    string walls;
+    string doors;
 public:
-    void setWalls(const std::string& walls) { this->walls = walls; }
-    void setDoors(const std::string& doors) { this->doors = doors; }
+    void setWalls(const string& walls) { this->walls = walls; }
+    void setDoors(const string& doors) { this->doors = doors; }
 };
 
 class HouseDirector {
