@@ -40,7 +40,7 @@ public:
             this->servers.push_back(server);
         }
     }
-    NetworkConnectionInterface& clone() const {
+    NetworkConnectionInterface& clone() const override {
         return NetworkConnectionPrototype(*this);
     }
     void loadImportantData() {
