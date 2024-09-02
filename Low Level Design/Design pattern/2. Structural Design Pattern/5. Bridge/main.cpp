@@ -2,8 +2,8 @@
 This pattern helps us to decouple an abstraction from its implementation, so that two can vary independently.
 */
 
-#include <iostream>
-#include <memory>
+#include<bits/stdc++.h>
+using namespace std;
 
 // Implementor: The base interface for the implementation hierarchy
 class Color {
@@ -16,14 +16,14 @@ public:
 class Red : public Color {
 public:
     void applyColor() const override {
-        std::cout << "Red color applied.\n";
+        cout << "Red color applied.\n";
     }
 };
 
 class Blue : public Color {
 public:
     void applyColor() const override {
-        std::cout << "Blue color applied.\n";
+        cout << "Blue color applied.\n";
     }
 };
 
@@ -31,10 +31,9 @@ public:
 // maintains a reference to the implementor
 class Shape {
 protected:
-    std::shared_ptr<Color> color;
-
+    shared_ptr<Color> color;
 public:
-    Shape(std::shared_ptr<Color> c) : color(c) {}
+    Shape(shared_ptr<Color> c) : color(c) {}
     virtual ~Shape() = default;
     virtual void draw() const = 0;
 };
@@ -42,29 +41,29 @@ public:
 // Refined Abstractions: Extend the abstraction's interface
 class Circle : public Shape {
 public:
-    Circle(std::shared_ptr<Color> c) : Shape(c) {}
+    Circle(shared_ptr<Color> c) : Shape(c) {}
     void draw() const override {
-        std::cout << "Drawing a Circle. ";
+        cout << "Drawing a Circle. ";
         color->applyColor();
     }
 };
 
 class Square : public Shape {
 public:
-    Square(std::shared_ptr<Color> c) : Shape(c) {}
+    Square(shared_ptr<Color> c) : Shape(c) {}
     void draw() const override {
-        std::cout << "Drawing a Square. ";
+        cout << "Drawing a Square. ";
         color->applyColor();
     }
 };
 
 // Usage
 int main() {
-    std::shared_ptr<Color> red = std::make_shared<Red>();
-    std::shared_ptr<Color> blue = std::make_shared<Blue>();
+    shared_ptr<Color> red = make_shared<Red>();
+    shared_ptr<Color> blue = make_shared<Blue>();
 
-    std::shared_ptr<Shape> redCircle = std::make_shared<Circle>(red);
-    std::shared_ptr<Shape> blueSquare = std::make_shared<Square>(blue);
+    shared_ptr<Shape> redCircle = make_shared<Circle>(red);
+    shared_ptr<Shape> blueSquare = make_shared<Square>(blue);
 
     redCircle->draw();  // Output: Drawing a Circle. Red color applied.
     blueSquare->draw(); // Output: Drawing a Square. Blue color applied.
