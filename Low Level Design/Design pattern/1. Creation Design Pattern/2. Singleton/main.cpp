@@ -43,6 +43,7 @@ private:
 public:
     static Singleton* getInstance() {
         lock_guard<mutex> lock(mtx); // Acquire lock
+        // mutex will automatically unlock when the lock_guard goes out of the scope.
         if(obj == nullptr) {
             obj = new Singleton();
         }
