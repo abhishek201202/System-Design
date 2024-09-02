@@ -8,7 +8,7 @@ using namespace std;
 class Target {
 public:
     virtual void request() const {
-        std::cout << "Target: The default target's behavior.\n";
+        cout << "Target: The default target's behavior.\n";
     }
     virtual ~Target() = default;
 };
@@ -16,7 +16,7 @@ public:
 class Adaptee {
 public:
     void specificRequest() const {
-        std::cout << "Adaptee: The specific request.\n";
+        cout << "Adaptee: The specific request.\n";
     }
 };
 // adapter class
@@ -26,7 +26,7 @@ private:
 public:
     Adapter(Adaptee* a) : adaptee(a) {}
     void request() const override {
-        std::cout << "Adapter: Translating request to specific request.\n";
+        cout << "Adapter: Translating request to specific request.\n";
         adaptee->specificRequest();
     }
     ~Adapter() {
