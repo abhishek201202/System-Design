@@ -4,13 +4,13 @@ This pattern acts as a bridge or intermediate between 2 incompatible interfaces.
 #include<bits/stdc++.h>
 using namespace std;
 
-// target interface
-class Target {
+// client interface
+class Client {
 public:
     virtual void request() const {
-        cout << "Target: The default target's behavior.\n";
+        cout << "Client: The default client's behavior.\n";
     }
-    virtual ~Target() = default;
+    virtual ~Client() = default;
 };
 // adaptee class
 class Adaptee {
@@ -20,7 +20,7 @@ public:
     }
 };
 // adapter class
-class Adapter : public Target {
+class Adapter : public Client {
 private:
     Adaptee* adaptee;
 public:
@@ -36,9 +36,9 @@ public:
 // client
 int main() {
     Adaptee* adaptee = new Adaptee();
-    Target* target = new Adapter(adaptee);
-    target->request();  // The client calls the method defined in the Target interface
-    delete target;
+    Client* client = new Adapter(adaptee);
+    client->request();  // The client calls the method defined in the Client interface
+    delete client;
     return 0;
 }
 
