@@ -11,8 +11,9 @@ private:
     vector<string> servers;
 public:
     void loadImportantData() {
-        this -> importantaData = "very very imp data.....";
-        // it takes 5 minutes
+        string data = "very very imp data.....";
+        // this takes 5 minutes to load from a server
+        this -> importantaData = data;
     }
     void setIp(string ip) {
         this->ip = ip;
@@ -43,8 +44,9 @@ public:
         return NetworkConnectionPrototype(*this);
     }
     void loadImportantData() {
-        this -> importantaData = "very very imp data.....";
-        // it takes 5 minutes=
+        string data = "very very imp data.....";
+        // this takes 5 minutes to load from a server
+        this -> importantaData = data;
     }
     void setIp(string ip) {
         this->ip = ip;
