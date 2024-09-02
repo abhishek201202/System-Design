@@ -56,6 +56,7 @@ class Singleton {
 private:
     static Singleton* obj;
     static once_flag initInstanceFlag;
+    // once_flag is a synchronization primitive that is used with call_once to ensure that a piece of code is only executed once
     Singleton(){};
     // Delete copy constructor and assignment operator to prevent copying
     Singleton(const Singleton&) = delete;
