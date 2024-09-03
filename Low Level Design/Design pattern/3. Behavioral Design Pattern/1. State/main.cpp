@@ -25,13 +25,13 @@ public:
     NoCoinState(VendingMachine* ctx) : context(ctx) {}
     void insertCoin() override;
     void ejectCoin() override {
-        std::cout << "You haven't inserted a coin.\n";
+        cout << "You haven't inserted a coin.\n";
     }
     void pressButton() override {
-        std::cout << "You need to insert a coin first.\n";
+        cout << "You need to insert a coin first.\n";
     }
     void dispense() override {
-        std::cout << "Insert a coin first.\n";
+        cout << "Insert a coin first.\n";
     }
 };
 
@@ -41,18 +41,18 @@ private:
 public:
     HasCoinState(VendingMachine* ctx) : context(ctx) {}
     void insertCoin() override {
-        std::cout << "You already inserted a coin.\n";
+        cout << "You already inserted a coin.\n";
     }
     void ejectCoin() override {
-        std::cout << "Coin returned.\n";
+        cout << "Coin returned.\n";
         context->setState(new NoCoinState(context));
     }
     void pressButton() override {
-        std::cout << "Button pressed.\n";
+        cout << "Button pressed.\n";
         context->setState(new SoldOutState(context));
     }
     void dispense() override {
-        std::cout << "No item dispensed.\n";
+        cout << "No item dispensed.\n";
     }
 };
 
@@ -62,16 +62,16 @@ private:
 public:
     SoldOutState(VendingMachine* ctx) : context(ctx) {}
     void insertCoin() override {
-        std::cout << "Sorry, the machine is sold out.\n";
+        cout << "Sorry, the machine is sold out.\n";
     }
     void ejectCoin() override {
-        std::cout << "No coin to return.\n";
+        cout << "No coin to return.\n";
     }
     void pressButton() override {
-        std::cout << "No item dispensed.\n";
+        cout << "No item dispensed.\n";
     }
     void dispense() override {
-        std::cout << "No item dispensed.\n";
+        cout << "No item dispensed.\n";
     }
 };
 
