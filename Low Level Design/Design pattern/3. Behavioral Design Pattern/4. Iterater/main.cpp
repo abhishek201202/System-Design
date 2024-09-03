@@ -11,12 +11,6 @@ public:
     virtual int next() = 0;
 };
 
-// aggregate interface 
-class Aggregate {
-public:
-    virtual Iterator* createIterator() const = 0;
-};
-
 // concrete iterator
 class ArrayIterator : public Iterator {
 private:
@@ -33,12 +27,17 @@ public:
     }
 };
 
+// aggregate interface 
+class Aggregate {
+public:
+    virtual Iterator* createIterator() const = 0;
+};
+
 // concrete aggregater 
 class ArrayAggregate : public Aggregate {
 private:
     int* data;
     int size;
-
 public:
     ArrayAggregate(int* data, int size) : data(data), size(size) {}
     Iterator* createIterator() const override {
@@ -52,10 +51,10 @@ public:
 // client
 int main() {
     int* data = new int[5]{1, 2, 3, 4, 5};
-    ConcreteAggregate aggregate(data, 5);
+    ArrayAggregate aggregate(data, 5);
     Iterator* iterator = aggregate.createIterator();
     while (iterator->hasNext()) {
-        std::cout << iterator->next() << " ";
+        cout << iterator->next() << " ";
     }
     cout << endl;
 }
