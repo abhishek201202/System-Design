@@ -10,6 +10,17 @@ public:
     virtual void update(float temperature) = 0;
 };
 
+// concrete observer
+class TemperatureDisplay : public Observer {
+private:
+    string name;
+public:
+    TemperatureDisplay(const string& displayName) : name(displayName) {}
+    void update(float temperature) override {
+        cout << name << " updated temperature: " << temperature << "°C\n";
+    }
+};
+
 // subject interface
 class Subject {
 public:
@@ -21,7 +32,7 @@ public:
 // concrete subject
 class TemperatureSensor : public Subject {
 private:
-    std::vector<Observer*> observers;
+    vector<Observer*> observers;
     float temperature;
 public:
     void setTemperature(float temp) {
@@ -32,7 +43,7 @@ public:
         observers.push_back(observer);
     }
     void detach(Observer* observer) override {
-        observers.erase(std::remove(observers.begin(), observers.end(), observer), observers.end());
+        observers.erase(remove(observers.begin(), observers.end(), observer), observers.end());
     }
     void notify() override {
         for (auto* observer : observers) {
@@ -41,16 +52,7 @@ public:
     }
 };
 
-// concrete observer
-class TemperatureDisplay : public Observer {
-private:
-    std::string name;
-public:
-    TemperatureDisplay(const std::string& displayName) : name(displayName) {}
-    void update(float temperature) override {
-        std::cout << name << " updated temperature: " << temperature << "°C\n";
-    }
-};
+
 
 
 
