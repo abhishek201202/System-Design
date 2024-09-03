@@ -5,6 +5,19 @@ This pattern helps to reduce the memory usage by sharing data among multiple obj
 #include<bits/stdc++.h>
 using namespace std;
 
+// The Context class that stores the extrinsic state (position)
+class Tree {
+private:
+    int x, y;
+    TreeType* type;
+public:
+    Tree(int x, int y, TreeType* type) : x(x), y(y), type(type) {}
+    void display() const {
+        type->display(x, y);
+    }
+};
+
+
 // The Flyweight class that contains the intrinsic state
 class TreeType {
 private:
@@ -18,11 +31,11 @@ public:
 };
 
 // The Flyweight Factory class
-class TreeFactory {
+class TreeTypeFactory {
 private:
     unordered_map<string, TreeType*> treeTypes;
 public:
-    ~TreeFactory() {
+    ~TreeTypeFactory() {
         for (auto pair : treeTypes) delete pair.second;
     }
     TreeType* getTreeType(const string& name, const string& texture) {
@@ -34,29 +47,14 @@ public:
     }
 };
 
-// The Context class that stores the extrinsic state (position)
-class Tree {
-private:
-    int x, y;
-    TreeType* type;
-
-public:
-    Tree(int x, int y, TreeType* type) : x(x), y(y), type(type) {}
-    
-    void display() const {
-        type->display(x, y);
-    }
-};
-
 // The Forest class that contains many trees
 class Forest {
 private:
     vector<Tree> trees;
-    TreeFactory treeFactory;
-
+    TreeTypeFactory treeTypeFactory;
 public:
     void plantTree(int x, int y, const string& name, const string& texture) {
-        TreeType* type = treeFactory.getTreeType(name, texture);
+        TreeType* type = treeTypeFactory.getTreeType(name, texture);
         trees.emplace_back(x, y, type);
     }
     
