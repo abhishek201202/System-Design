@@ -28,27 +28,17 @@ Non Functional Requirements:
 
 
 
-Actor:
-1) Passenger
-2) Elevator cars
-3) Floors
-4) Doors
-5) Button Panels
-6) Dispatcher => Responsible for selecting the elevator car, when person press any key
-7) Elevator System
-8) Monitoring System
-
-
-
-Use Cases:
-1) Calling the elevator
-2) Move / Stop the elevator
-3) open / Close doors
-4) Direction
-5) Floor
-6) Emergency Calls
-
-
+Objects:
+1. Building
+2. Floors
+3. Elevator cars
+4. Floors
+5. Doors
+6. Button Panels (internal and external)
+7. Display
+8. Dispatcher => Responsible for selecting the elevator car, when person press any key
+9. Elevator System
+10. Monitoring System
 
 Algorithm:
 1) FCFS (first come first serve) (queue)
@@ -56,6 +46,81 @@ Algorithm:
 3) SCAN/Elevator Algorithm (array)
 4) LOOK (BST)
 5) Destination Dispatch Algorithm (KNN to find the best elevator)
+
+
+Display
+--------------------
+int floor;
+Direction direction;
+
+ElevatorCar
+--------------------
+Display display;
+int currentPlayer;
+Direction currDir;
+Status status;
+Button *internalButton;
+move(int destinationFloor, Direction dir);
+
+
+enum Direction {
+    UP, DOWN
+}
+
+enum Status {
+    IDLE, MOVING
+}
+
+Button
+--------------------
+pressButton(int button);
+
+
+InternalButton
+--------------------
+Dispatcher* internalButtonDispatcher;
+pressButton(int button);
+
+ExternalButton
+--------------------
+Dispatcher* externalButtonDispatcher;
+pressButton(int button); -> this will call the submitRequest if Dispatcher
+
+
+ElevatorController
+--------------------
+ElevatorCar obj;
+Algorithm schedulingAlgo;
+acceptNewRequest(int floor, Direction dir);
+controlCar();
+
+
+Dispatcher
+---------------------
+
+
+InternalDispatcher
+---------------------
+vector<ElevatorController> controllers;
+Algorithm dispatchingAlgo;
+submitRequest();
+
+
+ExternalDispatcher
+---------------------
+vector<ElevatorController> controllers;
+submitRequest();
+
+Floor
+---------------
+int id;
+Button externalButton;
+
+Building
+---------------
+vector<Floor> floors;
+
+
 
 
 ============================================*/
