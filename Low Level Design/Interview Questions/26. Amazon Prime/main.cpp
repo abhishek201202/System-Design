@@ -1,4 +1,5 @@
 /*
+Blog - https://lldcoding.com/design-lld-amazon-prime-video-machine-coding
 FR - 
 1. user can manage their prime membership
 2. Upload / watch  Video
@@ -6,6 +7,103 @@ FR -
 4. offline downloading
 5. Live Sports
 6. 4k and hdr streaming
+*/
+
+/*
+
+VideoCatalog
+------------------------
+
+
+Video
+------------------------
+
+
+Movie (Video)
+------------------------
+
+
+TVShow (Video)
+------------------------
+
+VideoFactory
+------------------------
+
+MovieFactory (VideoFactory)
+------------------------
+
+
+TVShowFactory (VideoFactory)
+------------------------
+
+
+VideoNotifier
+------------------------
+vector<User> observer;
+
+
+User
+------------------------
+
+
+RecommendationStrategy (PopularVideosStrategy, PersonalizedVideosStrategy)
+------------------------
+
+
+VideoCommand
+------------------------
+
+AddToWatchlistCommand (VideoCommand)
+------------------------
+
+RemoveFromWatchlistCommand (VideoCommand)
+------------------------
+
+
+VideoDecorator
+------------------------
+
+
+SubtitledVideo (VideoDecorator)
+------------------------
+
+
+HDVideo (VideoDecorator)
+------------------------
+
+
+
+Playlist (Video)
+------------------------
+
+
+BasicPlaylist (playlist)
+------------------------
+
+
+VideoState
+------------------------
+
+
+PlayingState (VideoState)
+------------------------
+
+
+StoppedState (VideoState)
+------------------------
+
+
+StreamingVideo (VideoState)
+------------------------
+
+
+StreamingVideo (Video)
+------------------------
+
+
+VideoProxy (Video)
+------------------------
+
 
 */
 
@@ -13,252 +111,457 @@ FR -
 #include<bits/stdc++.h>
 using namespace std;
 
-// Enum for Subscription Status
-enum class SubscriptionStatus {
-    Subscribed,
-    NotSubscribed
-};
+class Video;
 
-// User Class
-class User {
-public:
-    string userID;
-    string name;
-    string email;
-    SubscriptionStatus subscriptionStatus;
-    vector<string> offlineDownloads;
-    User(const string& id, const string& nm, const string& em, SubscriptionStatus status) : userID(id), name(nm), email(em), subscriptionStatus(status) {}
-    void subscribeToPrime() {
-        subscriptionStatus = SubscriptionStatus::Subscribed;
-        cout << name << " has subscribed to Amazon Prime Video.\n";
-    }
-    void cancelPrimeSubscription() {
-        subscriptionStatus = SubscriptionStatus::NotSubscribed;
-        cout << name << " has canceled their Amazon Prime Video subscription.\n";
-    }
-    void downloadVideo(const string& videoID) {
-        offlineDownloads.push_back(videoID);
-        cout << "Video " << videoID << " has been downloaded for offline viewing.\n";
-    }
-    void manageOfflineDownloads() {
-        cout << "Offline downloads for " << name << ": ";
-        for (const auto& video : offlineDownloads) {
-            cout << video << " ";
-        }
-        cout << endl;
-    }
-};
-
-// Video Class
-class Video {
-public:
-    string videoID;
-    string title;
-    string genre;
-    int duration; // Duration in seconds
-    string quality; // e.g., "HD", "4K", "HDR"
-    Video(const string& id, const string& ttl, const string& gnr, int dur, const string& qlt) : videoID(id), title(ttl), genre(gnr), duration(dur), quality(qlt) {}
-    void getDetails() const {
-        cout << "Title: " << title << ", Genre: " << genre << ", Duration: " << duration << "s, Quality: " << quality << endl;
-    }
-};
-
-// VideoCatalog Class
+// VideoCatalog Singleton
 class VideoCatalog {
 private:
-    unordered_map<string, Video> catalog;
+    static VideoCatalog* instance;
+    vector<shared_ptr<Video>> videos;
+    
+    VideoCatalog() {}
+    
 public:
-    void addVideo(const Video& video) {
-        catalog[video.videoID] = video;
+    static VideoCatalog* getInstance() {
+        if (instance == nullptr) {
+            instance = new VideoCatalog();
+        }
+        return instance;
     }
-    Video* findVideo(const string& title) {
-        for (auto& pair : catalog) {
-            if (pair.second.title == title) {
-                return &pair.second;
+    
+    void addVideo(shared_ptr<Video> video) {
+        videos.push_back(video);
+    }
+    
+    shared_ptr<Video> getVideo(const string& videoId) {
+        for (const auto& video : videos) {
+            if (video->getId() == videoId) {
+                return video;
             }
         }
         return nullptr;
     }
 };
 
-// StreamingService Class
-class StreamingService {
-private:
-    const Video* currentVideo;
-    int currentPosition; // Position in seconds
-    string streamingQuality; // e.g., "HD", "4K", "HDR"
+VideoCatalog* VideoCatalog::instance = nullptr;
+
+// Video interface
+class Video {
 public:
-    StreamingService() : currentVideo(nullptr), currentPosition(0), streamingQuality("HD") {}
-    void playVideo(const Video& video) {
-        currentVideo = &video;
-        currentPosition = 0;
-        cout << "Playing video: " << video.title << endl;
+    virtual ~Video() = default;
+    virtual string getId() const = 0;
+    virtual void play() = 0;
+    virtual void addToWatchlist() = 0;
+    virtual void removeFromWatchlist() = 0;
+};
+
+// Movie class
+class Movie : public Video {
+private:
+    string title;
+    
+public:
+    Movie(const string& title) : title(title) {}
+    
+    string getId() const override {
+        return title;
     }
-    void pause() {
-        cout << "Pausing video at " << currentPosition << " seconds.\n";
+    
+    void play() override {
+        cout << "Playing movie: " << title << endl;
     }
-    void resume() {
-        cout << "Resuming video from " << currentPosition << " seconds.\n";
+    
+    void addToWatchlist() override {
+        cout << "Added movie " << title << " to watchlist." << endl;
     }
-    void stop() {
-        cout << "Stopping video.\n";
-        currentVideo = nullptr;
-        currentPosition = 0;
-    }
-    void buffering() {
-        cout << "Buffering...\n";
-    }
-    void setStreamingQuality(const string& quality) {
-        streamingQuality = quality;
-        cout << "Streaming quality set to " << quality << endl;
+    
+    void removeFromWatchlist() override {
+        cout << "Removed movie " << title << " from watchlist." << endl;
     }
 };
 
-// OfflineDownloader Class
-class OfflineDownloader {
+// TVShow class
+class TVShow : public Video {
 private:
-    unordered_map<string, Video> downloadedVideos;
+    string title;
+    
 public:
-    void downloadVideo(const Video& video) {
-        downloadedVideos[video.videoID] = video;
-        cout << "Video " << video.title << " has been downloaded for offline viewing.\n";
+    TVShow(const string& title) : title(title) {}
+    
+    string getId() const override {
+        return title;
     }
-    void getDownloadedVideos() const {
-        cout << "Downloaded videos: ";
-        for (const auto& pair : downloadedVideos) {
-            cout << pair.second.title << " ";
+    
+    void play() override {
+        cout << "Playing TV show: " << title << endl;
+    }
+    
+    void addToWatchlist() override {
+        cout << "Added TV show " << title << " to watchlist." << endl;
+    }
+    
+    void removeFromWatchlist() override {
+        cout << "Removed TV show " << title << " from watchlist." << endl;
+    }
+};
+
+// VideoFactory interface
+class VideoFactory {
+public:
+    virtual ~VideoFactory() = default;
+    virtual shared_ptr<Video> createVideo(const string& title) = 0;
+};
+
+// MovieFactory class
+class MovieFactory : public VideoFactory {
+public:
+    shared_ptr<Video> createVideo(const string& title) override {
+        return make_shared<Movie>(title);
+    }
+};
+
+// TVShowFactory class
+class TVShowFactory : public VideoFactory {
+public:
+    shared_ptr<Video> createVideo(const string& title) override {
+        return make_shared<TVShow>(title);
+    }
+};
+
+// Observer interface
+class Observer {
+public:
+    virtual ~Observer() = default;
+    virtual void update(const string& message) = 0;
+};
+
+// User class
+class User : public Observer {
+private:
+    string userId;
+    
+public:
+    User(const string& userId) : userId(userId) {}
+    
+    void update(const string& message) override {
+        cout << "User " << userId << " received update: " << message << endl;
+    }
+};
+
+// VideoNotifier class
+class VideoNotifier {
+private:
+    vector<shared_ptr<Observer>> observers;
+    
+public:
+    void addObserver(shared_ptr<Observer> observer) {
+        observers.push_back(observer);
+    }
+    
+    void notifyObservers(const string& message) {
+        for (const auto& observer : observers) {
+            observer->update(message);
         }
-        cout << endl;
     }
 };
 
-// LiveSportsService Class
-class LiveSportsService {
+// RecommendationStrategy interface
+class RecommendationStrategy {
+public:
+    virtual ~RecommendationStrategy() = default;
+    virtual vector<shared_ptr<Video>> recommendVideos(shared_ptr<User> user) = 0;
+};
+
+// PopularVideosStrategy class
+class PopularVideosStrategy : public RecommendationStrategy {
+public:
+    vector<shared_ptr<Video>> recommendVideos(shared_ptr<User> user) override {
+        // Implementation details...
+        return {};
+    }
+};
+
+// PersonalizedVideosStrategy class
+class PersonalizedVideosStrategy : public RecommendationStrategy {
+public:
+    vector<shared_ptr<Video>> recommendVideos(shared_ptr<User> user) override {
+        // Implementation details...
+        return {};
+    }
+};
+
+// VideoCommand interface
+class VideoCommand {
+public:
+    virtual ~VideoCommand() = default;
+    virtual void execute() = 0;
+};
+
+// AddToWatchlistCommand class
+class AddToWatchlistCommand : public VideoCommand {
 private:
-    unordered_map<string, bool> liveEvents; // Event ID and its status
+    shared_ptr<Video> video;
+    
 public:
-    void startLiveEvent(const string& eventID) {
-        liveEvents[eventID] = true;
-        cout << "Live sports event " << eventID << " started.\n";
-    }
-
-    void stopLiveEvent(const string& eventID) {
-        liveEvents[eventID] = false;
-        cout << "Live sports event " << eventID << " stopped.\n";
+    AddToWatchlistCommand(shared_ptr<Video> video) : video(video) {}
+    
+    void execute() override {
+        video->addToWatchlist();
     }
 };
 
-// SubscriptionManager Class
-class SubscriptionManager {
-public:
-    bool checkSubscriptionStatus(const User& user) {
-        return user.subscriptionStatus == SubscriptionStatus::Subscribed;
-    }
-    void updateSubscriptionStatus(User& user, bool status) {
-        user.subscriptionStatus = status ? SubscriptionStatus::Subscribed : SubscriptionStatus::NotSubscribed;
-        cout << (status ? "User is now subscribed to Prime Video." : "User subscription to Prime Video has been canceled.") << endl;
-    }
-};
-
-// PrimeVideoService Class
-class PrimeVideoService {
+// RemoveFromWatchlistCommand class
+class RemoveFromWatchlistCommand : public VideoCommand {
 private:
-    User& user;
-    VideoCatalog videoCatalog;
-    StreamingService streamingService;
-    OfflineDownloader offlineDownloader;
-    LiveSportsService liveSportsService;
-    SubscriptionManager subscriptionManager;
+    shared_ptr<Video> video;
+    
 public:
-    PrimeVideoService(User& u) : user(u), subscriptionManager() {}
-    void addVideoToCatalog(const Video& video) {
-        videoCatalog.addVideo(video);
+    RemoveFromWatchlistCommand(shared_ptr<Video> video) : video(video) {}
+    
+    void execute() override {
+        video->removeFromWatchlist();
     }
-    void playVideo(const string& title) {
-        if (subscriptionManager.checkSubscriptionStatus(user)) {
-            Video* video = videoCatalog.findVideo(title);
-            if (video) {
-                streamingService.playVideo(*video);
-            } else {
-                cout << "Video not found in catalog.\n";
-            }
+};
+
+// VideoDecorator abstract class
+class VideoDecorator : public Video {
+protected:
+    shared_ptr<Video> decoratedVideo;
+    
+public:
+    VideoDecorator(shared_ptr<Video> decoratedVideo) : decoratedVideo(decoratedVideo) {}
+    
+    string getId() const override {
+        return decoratedVideo->getId();
+    }
+    
+    void play() override {
+        decoratedVideo->play();
+    }
+    
+    void addToWatchlist() override {
+        decoratedVideo->addToWatchlist();
+    }
+    
+    void removeFromWatchlist() override {
+        decoratedVideo->removeFromWatchlist();
+    }
+};
+
+// SubtitledVideo class
+class SubtitledVideo : public VideoDecorator {
+public:
+    SubtitledVideo(shared_ptr<Video> decoratedVideo) : VideoDecorator(decoratedVideo) {}
+    
+    void play() override {
+        cout << "Playing subtitled video..." << endl;
+        VideoDecorator::play();
+    }
+};
+
+// HDVideo class
+class HDVideo : public VideoDecorator {
+public:
+    HDVideo(shared_ptr<Video> decoratedVideo) : VideoDecorator(decoratedVideo) {}
+    
+    void play() override {
+        cout << "Playing HD video..." << endl;
+        VideoDecorator::play();
+    }
+};
+
+// Playlist interface
+class Playlist : public Video {
+public:
+    virtual void addVideo(shared_ptr<Video> video) = 0;
+    virtual void removeVideo(shared_ptr<Video> video) = 0;
+};
+
+// BasicPlaylist class
+class BasicPlaylist : public Playlist {
+private:
+    vector<shared_ptr<Video>> videos;
+    
+public:
+    void addVideo(shared_ptr<Video> video) override {
+        videos.push_back(video);
+    }
+    
+    void removeVideo(shared_ptr<Video> video) override {
+        videos.erase(remove(videos.begin(), videos.end(), video), videos.end());
+    }
+    
+    void play() override {
+        cout << "Playing all videos in the playlist..." << endl;
+        for (const auto& video : videos) {
+            video->play();
+        }
+    }
+};
+
+// VideoState interface
+class VideoState {
+public:
+    virtual ~VideoState() = default;
+    virtual void play() = 0;
+    virtual void pause() = 0;
+    virtual void stop() = 0;
+};
+
+// PlayingState class
+class PlayingState : public VideoState {
+public:
+    void play() override {
+        cout << "Video is already playing." << endl;
+    }
+    
+    void pause() override {
+        cout << "Pausing video..." << endl;
+    }
+    
+    void stop() override {
+        cout << "Stopping video..." << endl;
+    }
+};
+
+// PausedState class
+class PausedState : public VideoState {
+public:
+    void play() override {
+        cout << "Resuming video..." << endl;
+    }
+    
+    void pause() override {
+        cout << "Video is already paused." << endl;
+    }
+    
+    void stop() override {
+        cout << "Stopping video..." << endl;
+    }
+};
+
+// StoppedState class
+class StoppedState : public VideoState {
+public:
+    void play() override {
+        cout << "Starting to play video..." << endl;
+    }
+    
+    void pause() override {
+        cout << "Cannot pause. Video is stopped." << endl;
+    }
+    
+    void stop() override {
+        cout << "Video is already stopped." << endl;
+    }
+};
+
+// StreamingVideo class
+class StreamingVideo : public Video {
+private:
+    string videoId;
+    
+public:
+    StreamingVideo(const string& videoId) : videoId(videoId) {}
+    
+    string getId() const override {
+        return videoId;
+    }
+    
+    void play() override {
+        cout << "Playing streaming video " << videoId << "..." << endl;
+    }
+    
+    void addToWatchlist() override {}
+    
+    void removeFromWatchlist() override {}
+};
+
+// VideoProxy class
+class VideoProxy : public Video {
+private:
+    shared_ptr<Video> video;
+    shared_ptr<User> user;
+    
+public:
+    VideoProxy(shared_ptr<Video> video, shared_ptr<User> user)
+        : video(video), user(user) {}
+    
+    string getId() const override {
+        return video->getId();
+    }
+    
+    void play() override {
+        if (userHasSubscription()) {
+            video->play();
         } else {
-            cout << "User is not subscribed to Prime Video.\n";
+            cout << "User does not have a subscription." << endl;
         }
     }
-    void pauseVideo() {
-        streamingService.pause();
+    
+    void addToWatchlist() override {
+        video->addToWatchlist();
     }
-    void resumeVideo() {
-        streamingService.resume();
+    
+    void removeFromWatchlist() override {
+        video->removeFromWatchlist();
     }
-    void stopVideo() {
-        streamingService.stop();
-    }
-    void bufferVideo() {
-        streamingService.buffering();
-    }
-    void setStreamingQuality(const string& quality) {
-        streamingService.setStreamingQuality(quality);
-    }
-    void downloadVideo(const Video& video) {
-        offlineDownloader.downloadVideo(video);
-        user.downloadVideo(video.videoID);
-    }
-    void manageOfflineDownloads() {
-        user.manageOfflineDownloads();
-    }
-    void startLiveEvent(const string& eventID) {
-        liveSportsService.startLiveEvent(eventID);
-    }
-    void stopLiveEvent(const string& eventID) {
-        liveSportsService.stopLiveEvent(eventID);
-    }
-    void getDownloadedVideos() {
-        offlineDownloader.getDownloadedVideos();
+    
+private:
+    bool userHasSubscription() const {
+        // Check user subscription status...
+        return true;
     }
 };
 
-// Main function to simulate the system
+// Main function
 int main() {
-    // Create a user
-    User user("user001", "Alice", "alice@example.com", SubscriptionStatus::Subscribed);
+    shared_ptr<User> user1 = make_shared<User>("user1");
+    shared_ptr<User> user2 = make_shared<User>("user2");
 
-    // Create a PrimeVideoService for the user
-    PrimeVideoService primeVideoService(user);
+    VideoCatalog* videoCatalog = VideoCatalog::getInstance();
 
-    // Add videos to catalog
-    Video video1("vid001", "Movie A", "Action", 120, "4K");
-    Video video2("vid002", "Movie B", "Drama", 90, "HDR");
+    shared_ptr<Video> movie = make_shared<Movie>("Inception");
+    shared_ptr<Video> tvShow = make_shared<TVShow>("Breaking Bad");
 
-    primeVideoService.addVideoToCatalog(video1);
-    primeVideoService.addVideoToCatalog(video2);
+    videoCatalog->addVideo(movie);
+    videoCatalog->addVideo(tvShow);
 
-    // Play a video
-    primeVideoService.playVideo("Movie A");
+    VideoNotifier videoNotifier;
+    videoNotifier.addObserver(user1);
+    videoNotifier.addObserver(user2);
 
-    // Set streaming quality
-    primeVideoService.setStreamingQuality("4K");
+    videoNotifier.notifyObservers("New video available!");
 
-    // Download a video
-    primeVideoService.downloadVideo(video1);
+    shared_ptr<RecommendationStrategy> strategy = make_shared<PopularVideosStrategy>();
+    vector<shared_ptr<Video>> recommendations = strategy->recommendVideos(user1);
+    cout << "Recommendations for user1: " << recommendations.size() << endl;
 
-    // Manage offline downloads
-    primeVideoService.manageOfflineDownloads();
+    shared_ptr<VideoCommand> addToWatchlistCommand = make_shared<AddToWatchlistCommand>(movie);
+    addToWatchlistCommand->execute();
 
-    // Start a live sports event
-    primeVideoService.startLiveEvent("event001");
+    shared_ptr<VideoCommand> removeFromWatchlistCommand = make_shared<RemoveFromWatchlistCommand>(tvShow);
+    removeFromWatchlistCommand->execute();
 
-    // Stop a live sports event
-    primeVideoService.stopLiveEvent("event001");
+    shared_ptr<VideoDecorator> subtitledMovie = make_shared<SubtitledVideo>(movie);
+    subtitledMovie->play();
 
-    // Get downloaded videos
-    primeVideoService.getDownloadedVideos();
+    shared_ptr<VideoDecorator> hdTvShow = make_shared<HDVideo>(tvShow);
+    hdTvShow->play();
 
-    // Pause, resume, and stop video playback
-    primeVideoService.pauseVideo();
-    primeVideoService.resumeVideo();
-    primeVideoService.stopVideo();
+    shared_ptr<Playlist> playlist = make_shared<BasicPlaylist>();
+    playlist->addVideo(movie);
+    playlist->addVideo(tvShow);
+    playlist->play();
+
+    shared_ptr<VideoState> playingState = make_shared<PlayingState>();
+    playingState->play();
+    playingState->pause();
+    playingState->stop();
+
+    shared_ptr<Video> video = make_shared<StreamingVideo>("xyz123");
+    shared_ptr<VideoProxy> videoProxy = make_shared<VideoProxy>(video, user1);
+    videoProxy->play();
 
     return 0;
 }
