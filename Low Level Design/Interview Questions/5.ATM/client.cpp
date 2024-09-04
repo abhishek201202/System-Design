@@ -1,3 +1,93 @@
+/*
+State Pattern
+ - we define all the states with this pattern 
+Chain of Responsibilty
+ - cash withdrawl happen with this flow
+
+*/
+
+/*
+
+AtmState
+------------------
+insertCard();
+authenticatePin();
+selectOperation();
+cashWidhrawl();
+displayBalance();
+return Card();
+
+IdleState (AtmState)
+------------------
+insertCard()
+
+HasCardState
+------------------
+authenticatePin();
+exit();
+returnCard();
+
+SelectOperation
+------------------
+selectOperation();
+exit()
+returnCard();
+
+CashWidhdrawlState
+------------------
+cashWithdraw();
+exit();
+return();
+
+
+CheckBalance
+------------------
+checkBalance();
+exit();
+return();
+
+User
+------------------
+Card card;
+BankAccount account;
+
+
+Card
+------------------
+int cvv;
+BankAccount account
+
+BankAccount
+------------------
+int balance;
+updateBalance();
+
+
+ATMRoom
+------------------
+Atm atm;
+User user;
+
+
+CashWithdrawlProcessor
+------------------
+CashWithdrawlProcessor nextProcessor
+withdraw();
+
+2000CashWithdrawlProcessor
+------------------
+withdraw();
+
+1000CashWithdrawlProcessor
+------------------
+withdraw();
+
+500CashWithdrawlProcessor
+------------------
+withdraw();
+
+*/
+
 #include<bits/stdc++.h>
 using namespace std;
 
