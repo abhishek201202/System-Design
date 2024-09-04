@@ -1,4 +1,8 @@
 /*
+Problem it solves - 
+Class explosion (if you have two dimensions, like "Shape" (Circle, Square) and "Color" (Red, Blue), 
+a naive approach might require creating classes for each combination (e.g., RedCircle, BlueCircle, RedSquare, BlueSquare).)
+Definition - 
 This pattern helps us to decouple an abstraction from its implementation, so that two can vary independently.
 */
 
