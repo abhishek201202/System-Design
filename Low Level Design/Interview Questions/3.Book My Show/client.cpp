@@ -78,6 +78,7 @@ BookMyShow
 MovieController *movieController;
 TheatreController *theatreContrller;
 
-
+Locking Mechanism - 
+We will go with optimistic locking mechanism and use redis for locking 
 
 */
