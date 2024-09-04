@@ -58,11 +58,11 @@ class VehicleInventory {
 
     vector<Vehical*> searchVehical(VehicalType type);
 
-    void addVehical(Vehical* vehical);
-    void removeVehical(Vehical* vehical);
+    virtual void addVehical(Vehical* vehical);
+    virtual void removeVehical(Vehical* vehical);
 
-    void rentVehicle(string vechicalId);
-    void returnVehicle(Vehical* vehical);
+    virtual void rentVehicle(string vechicalId);
+    virtual void returnVehicle(Vehical* vehical);
 };
 
 class CarInventory: public VehicleInventory {
