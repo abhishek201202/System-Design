@@ -6,77 +6,137 @@ FR -
 */
 
 #include<bits/stdc++.h>
-#include <iostream>
 using namespace std;
 
+class Command {
+public:
+    virtual ~Command() {}
+    virtual void execute() = 0;
+    virtual void undo() = 0;
+    virtual void redo() = 0;
+};
 
-// Flyweight class
-class Character {
+class InsertTextCommand : public Command {
 private:
-    char c_;
-    string font_;
-    int size_;
-    string color_;
+    string text;
+    int position;
+    string& document;
 
 public:
-    Character(char c, const string& font, int size, const string& color) : c_(c), font_(font), size_(size), color_(color) {}
-    void Display() const {
-        cout << "Character: " << c_ << ", Font: " << font_ << ", Size: " << size_ << ", Color: " << color_ << endl;
+    InsertTextCommand(string txt, int pos, string& doc)
+        : text(txt), position(pos), document(doc) {}
+
+    void execute() override {
+        document.insert(position, text);
+    }
+
+    void undo() override {
+        document.erase(position, text.size());
+    }
+
+    void redo() override {
+        execute();
     }
 };
 
-// Flyweight Factory class
-class CharacterFactory {
+class DeleteTextCommand : public Command {
 private:
-    unordered_map<string, shared_ptr<Character>> characters_;
+    string deletedText;
+    int position;
+    string& document;
 
 public:
-    shared_ptr<Character> GetCharacter(char c, const string& font, int size, const string& color) {
-        string key = string(1, c) + font + to_string(size) + color;
-        
-        if (characters_.find(key) == characters_.end()) {
-            characters_[key] = make_shared<Character>(c, font, size, color);
+    DeleteTextCommand(int pos, int len, string& doc)
+        : position(pos), document(doc) {
+        deletedText = document.substr(pos, len);
+    }
+
+    void execute() override {
+        document.erase(position, deletedText.size());
+    }
+
+    void undo() override {
+        document.insert(position, deletedText);
+    }
+
+    void redo() override {
+        execute();
+    }
+};
+
+class CommandManager {
+private:
+    stack<Command*> undoStack;
+    stack<Command*> redoStack;
+
+public:
+    void executeCommand(Command* command) {
+        command->execute();
+        undoStack.push(command);
+        // Clear the redo stack when a new command is executed
+        while (!redoStack.empty()) {
+            delete redoStack.top();
+            redoStack.pop();
         }
-        
-        return characters_[key];
     }
-};
 
-class Document {
-private:
-    vector<shared_ptr<Character>> document; // for delete we can make it linked list
-public:
-    void addCharacter(shared_ptr<Character> ch) {
-        document.push_back(ch);
+    void undo() {
+        if (!undoStack.empty()) {
+            Command* command = undoStack.top();
+            undoStack.pop();
+            command->undo();
+            redoStack.push(command);
+        }
     }
-    void printDocument() {
-        for(shared_ptr<Character> ch: document) {
-            ch -> Display();
+
+    void redo() {
+        if (!redoStack.empty()) {
+            Command* command = redoStack.top();
+            redoStack.pop();
+            command->redo();
+            undoStack.push(command);
+        }
+    }
+
+    ~CommandManager() {
+        while (!undoStack.empty()) {
+            delete undoStack.top();
+            undoStack.pop();
+        }
+        while (!redoStack.empty()) {
+            delete redoStack.top();
+            redoStack.pop();
         }
     }
 };
 
-// Client code
 int main() {
-    CharacterFactory factory;
-    Document document;
-    
-    document.addCharacter(factory.GetCharacter('H', "Arial", 12, "Black"));
-    document.addCharacter(factory.GetCharacter('e', "Arial", 12, "Black"));
-    document.addCharacter(factory.GetCharacter('l', "Arial", 12, "Black"));
-    document.addCharacter(factory.GetCharacter('l', "Arial", 12, "Black"));
-    document.addCharacter(factory.GetCharacter('o', "Arial", 12, "Black"));
-    
-    document.addCharacter(factory.GetCharacter(' ', "Arial", 12, "Black"));
-    
-    document.addCharacter(factory.GetCharacter('W', "Arial", 12, "Black"));
-    document.addCharacter(factory.GetCharacter('o', "Arial", 12, "Black"));
-    document.addCharacter(factory.GetCharacter('r', "Arial", 12, "Black"));
-    document.addCharacter(factory.GetCharacter('l', "Arial", 12, "Black"));
-    document.addCharacter(factory.GetCharacter('d', "Arial", 12, "Black"));
+    string document;
+    CommandManager manager;
 
-    // Display the document
-    document.printDocument();
+    // Insert "Hello"
+    manager.executeCommand(new InsertTextCommand("Hello", 0, document));
+    cout << "Document after insert: " << document << endl;
+
+    // Insert " World"
+    manager.executeCommand(new InsertTextCommand(" World", 5, document));
+    cout << "Document after insert: " << document << endl;
+
+    // Undo last command
+    manager.undo();
+    cout << "Document after undo: " << document << endl;
+
+    // Redo last undo
+    manager.redo();
+    cout << "Document after redo: " << document << endl;
+
+    // Delete "World"
+    manager.executeCommand(new DeleteTextCommand(5, 6, document));
+    cout << "Document after delete: " << document << endl;
+
+    // Undo delete
+    manager.undo();
+    cout << "Document after undo delete: " << document << endl;
 
     return 0;
 }
