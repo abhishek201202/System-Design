@@ -25,6 +25,7 @@ int rollDice();
 ------------------------
 Jump (snake, ladder)
 ------------------------
+int id;
 int start;
 int end;
 
