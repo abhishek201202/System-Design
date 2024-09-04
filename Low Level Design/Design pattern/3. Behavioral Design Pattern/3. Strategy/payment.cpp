@@ -13,11 +13,8 @@ private:
     string cardHolder;
     string cvv;
     string expiryDate;
-
 public:
-    CreditCardPayment(const string& number, const string& holder, const string& cvv, const string& expiry)
-        : cardNumber(number), cardHolder(holder), cvv(cvv), expiryDate(expiry) {}
-
+    CreditCardPayment(const string& number, const string& holder, const string& cvv, const string& expiry) : cardNumber(number), cardHolder(holder), cvv(cvv), expiryDate(expiry) {}
     void pay(int amount) override {
         cout << "Paid " << amount << " using Credit Card." << endl;
     }
@@ -27,11 +24,8 @@ class PayPalPayment : public PaymentStrategy {
 private:
     string email;
     string password;
-
 public:
-    PayPalPayment(const string& email, const string& password)
-        : email(email), password(password) {}
-
+    PayPalPayment(const string& email, const string& password): email(email), password(password) {}
     void pay(int amount) override {
         cout << "Paid " << amount << " using PayPal." << endl;
     }
@@ -40,11 +34,8 @@ public:
 class BitcoinPayment : public PaymentStrategy {
 private:
     string walletAddress;
-
 public:
-    BitcoinPayment(const string& address)
-        : walletAddress(address) {}
-
+    BitcoinPayment(const string& address) : walletAddress(address) {}
     void pay(int amount) override {
         cout << "Paid " << amount << " using Bitcoin." << endl;
     }
@@ -56,7 +47,6 @@ private:
     PaymentStrategy* paymentStrategy;
 public:
     ShoppingCart(PaymentStrategy* strategy) : paymentStrategy(strategy) {}
-
     void checkout(int amount) {
         paymentStrategy->pay(amount);
     }
