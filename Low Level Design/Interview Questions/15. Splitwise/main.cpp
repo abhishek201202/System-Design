@@ -74,24 +74,6 @@ class GroupController {
     void deleteGrp();
 };
 
-class BalanceSheet {
-    unordered_map<User*, Balance> userToAmt;
-};
-
-class Balance {
-    double amt;
-    BalanceType type;
-}
-
-enum BalanceType {
-    TAKE, GIVE
-};
-
-class BalanceSheetController {
-    void updateBalanceSheet(); // called for all the user on which split is happening, once expense is added or removed
-}
-
-
 class Expense {
     User *paidBy;
     Split *split;
@@ -115,4 +97,22 @@ class UnEqualSplitExpenseController: public ExpenseController {
     void addExpense () override;
     void removeExpense () override;
 };
+
+
+class BalanceSheet {
+    unordered_map<User*, Balance> userToAmt;
+};
+
+class Balance {
+    double amt;
+    BalanceType type;
+}
+
+enum BalanceType {
+    TAKE, GIVE
+};
+
+class BalanceSheetController {
+    void updateBalanceSheet(); // called for all the user on which split is happening, once expense is added or removed
+}
 
