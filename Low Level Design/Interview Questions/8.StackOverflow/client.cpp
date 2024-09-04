@@ -1,6 +1,16 @@
 #include<bits/stdc++.h>
 using namespace std;
 
+/*
+Functional Requirement - 
+1. Add / delete user
+2. user can search / add / delete, questions / answers / comments
+3. Guest can search questions / answers / comments
+4. upvote / downvote / closevote / deletevote on questions / answers / comments
+5. questions can have lot of answer
+6. Questions and answer both can have comments
+7. Questions can have all the edit history
+*/
 
 class User {
 	int guestId;
