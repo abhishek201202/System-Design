@@ -1,7 +1,7 @@
 #include<iostream>
 using namespace std;
 
-/*============================================
+/*
 Fucntional Reqirements:
 1) state of the elevator
     - up, down, idle
@@ -123,7 +123,7 @@ vector<Floor> floors;
 
 
 
-============================================*/
+*/
 
 enum State{
     UP, DOWN, IDLE
