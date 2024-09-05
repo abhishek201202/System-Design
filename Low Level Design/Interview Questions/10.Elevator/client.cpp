@@ -89,7 +89,7 @@ pressButton(int button); -> this will call the submitRequest of Dispatcher
 ElevatorController
 --------------------
 ElevatorCar obj;
-Algorithm schedulingAlgo;
+Algorithm schedulingAlgo; // lift dispatcher algorithm // one elevator can have multiple request this algo will pick where to go first
 acceptNewRequest(int floor, Direction dir);
 controlCar();
 
@@ -101,14 +101,14 @@ Dispatcher
 InternalDispatcher
 ---------------------
 vector<ElevatorController> controllers;
-Algorithm dispatchingAlgo;
-submitRequest();
+submitRequest(int liftId, RequestOb obj);
 
 
 ExternalDispatcher
 ---------------------
 vector<ElevatorController> controllers;
-submitRequest();
+Algorithm dispatchingAlgo; // there might be multiple elevator so which request is served by which elevator is decided by this algorithm
+submitRequest(int floor, Direction dir);
 
 Floor
 ---------------
