@@ -3,7 +3,7 @@
 FR - 
 1. Can have multiple dice / snakes / ladder / player
 2. game will finished when a player wins
-3. Snakes / Ladder are auto generated OR given by user ?
+3. Snakes / Ladder are auto generated
 */
 
 #include<bits/stdc++.h>
