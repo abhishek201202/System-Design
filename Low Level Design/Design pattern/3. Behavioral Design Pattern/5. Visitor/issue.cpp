@@ -31,4 +31,4 @@ public:
     }
 }
 
-// if i have to add new functions in circle it will voilate the open / closed principle
+// if i have to add new functions (calculatePermiter) in circle it will voilate the open / closed principle
