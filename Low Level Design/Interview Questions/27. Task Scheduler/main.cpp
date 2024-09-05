@@ -1,6 +1,35 @@
 #include<bits/stdc++.h>
 using namespace std;
 
+/*
+Task
+------------
+
+
+TaskQueue
+------------
+
+
+PriorityTaskQueue (TaskQueue)
+------------
+
+
+Scheduler
+------------
+TaskQueue *taskQueue;
+
+
+PriorityBasedScheduler (Scheduler)
+------------
+
+
+TaskManager
+------------
+Scheduler *scheduler;
+
+
+*/
+
 // Task Class
 class Task {
 public:
