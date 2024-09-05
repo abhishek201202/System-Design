@@ -56,7 +56,6 @@ Direction direction;
 ElevatorCar
 --------------------
 Display display;
-int currentPlayer;
 Direction currDir;
 Status status;
 Button *internalButton;
@@ -84,7 +83,7 @@ pressButton(int button);
 ExternalButton
 --------------------
 Dispatcher* externalButtonDispatcher;
-pressButton(int button); -> this will call the submitRequest if Dispatcher
+pressButton(int button); -> this will call the submitRequest of Dispatcher
 
 
 ElevatorController
@@ -121,6 +120,8 @@ Building
 vector<Floor> floors;
 
 
+
+PressButton -> submitRequest (Dispatcher) -> accepthNewRequest (ElevatorController) -> controlCar(ElevatorController) -> move (ElevatorCar)
 
 
 */
