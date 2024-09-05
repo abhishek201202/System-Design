@@ -10,6 +10,7 @@ Functional Requirement -
 5. questions can have lot of answer
 6. Questions and answer both can have comments
 7. Questions can have all the edit history
+8. Notification when, activity happening for a question on which i have commented.
 */
 
 class User {
