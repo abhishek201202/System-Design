@@ -1,4 +1,5 @@
 /*
+L: Liskov Substitution
 * if class B is subtype of class A, then we should be able to replace 
 object A with B without breaking the behaviour of program
 * Subclass should extend the capability of parent class not narrow it down.

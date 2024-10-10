@@ -1,4 +1,5 @@
 /*
+D: dependency inversion principle
 class should depend on interfaces rather than concrete classes
 */
 #include<bits/stdc++.h>

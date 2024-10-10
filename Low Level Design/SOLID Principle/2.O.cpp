@@ -1,4 +1,5 @@
 /*
+O: Open / Close Principle
 Open for extension but closed for modification
 */
 

@@ -1,4 +1,5 @@
 /*
+I: Interface Segmented Principle
 Interfaces should be such that clients should not implement unnecessary functions they do not need.
 */
 #include<bits/stdc++.h>
